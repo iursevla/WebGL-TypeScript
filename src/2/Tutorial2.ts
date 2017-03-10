@@ -2,7 +2,7 @@
  * This class contains helper functions to create multiple shaders
  * and to create the program and relate shader with said program
  */
-class WebGLHelperFunctions {
+class WebGLHelperFunctions2 {
 
     public vertexShaderCode = `
             attribute vec2 pos;
@@ -35,7 +35,7 @@ class WebGLHelperFunctions {
      * @param vertices, the vertices to associate
      * @param gl, current WebGLRenderingContext
      */
-    associateVerticesToBuffer(vertices: [number]) {
+    associateVerticesToBuffer(vertices: number[]) {
         let vertex_buffer = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertex_buffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
@@ -103,15 +103,25 @@ class WebGLHelperFunctions {
 /**
  * Code for the first example on  TutorialsPoint -> https://www.tutorialspoint.com/webgl/webgl_sample_application.htm
  */
-class Dois {
+class Square {
 
     draw() {
         //1- Get getContext
-        let helper: WebGLHelperFunctions = new WebGLHelperFunctions('gl-canvas');
+        let helper: WebGLHelperFunctions2 = new WebGLHelperFunctions2('gl-canvas');
         let gl = helper.gl;
 
+        let p0 = [-0.5, -0.5]
+        let p1 = [0.5, -0.5]
+        let p2 = [0.5, 0.5]
+        let p3 = [-0.5, 0.5]
+
+        let triVertices = [-0.5, -0.5, 0.5, -0.5, 0.5, 0.5];
+
+        let quaVertices = [].concat(p0, p3, p1, p3, p1, p2);
+        console.log(quaVertices)
+
         //Create vertices and associate them with a buffer
-        let vertex_buffer = helper.associateVerticesToBuffer([-0.5, -0.5, 0.5, -0.5, 0.0, 0.5]);
+        let vertex_buffer = helper.associateVerticesToBuffer(quaVertices);
 
         //Create vertex and fragment shaders
         let vertexShader = helper.createShaders(helper.vertexShaderCode, gl.VERTEX_SHADER);
@@ -121,14 +131,14 @@ class Dois {
         let program = helper.createProgramAndAttachShaders(vertexShader, fragmentShader);
 
         //Bind vertex buffer object
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        //gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
         //Get the attribute location cord for each vertex (inside vertexShaderCode)
 
         let pos = gl.getAttribLocation(program, "pos");
         gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);//point an attribute to the currently bound VBO
         gl.enableVertexAttribArray(pos);
 
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
 }
