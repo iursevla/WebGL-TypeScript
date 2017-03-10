@@ -1,0 +1,12 @@
+{
+  "name": "webgl-typescript",
+  "version": "1.0.0",
+  "description": "WebGL TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rui Alves",
+  "license": "ISC"
+}
