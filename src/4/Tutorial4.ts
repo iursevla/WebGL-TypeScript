@@ -2,7 +2,7 @@
  * This class contains helper functions to create multiple shaders
  * and to create the program and relate shader with said program
  */
-class WebGLHelperFunctions2 {
+class WebGLHelperFunctions4 {
 
     public vertexShaderCode = `
             attribute vec2 pos;
@@ -11,7 +11,9 @@ class WebGLHelperFunctions2 {
 
     public fragmentShaderCode = `
             precision highp float;
-            void main() { gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0); }
+            void main() { 
+                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+              }
         `;
 
     public gl: WebGLRenderingContext;
@@ -103,11 +105,11 @@ class WebGLHelperFunctions2 {
 /**
  * Code for the first example on  TutorialsPoint -> https://www.tutorialspoint.com/webgl/webgl_sample_application.htm
  */
-class Square {
+class MultipleGeometry2 {
 
     draw() {
         //1- Get getContext
-        let helper: WebGLHelperFunctions2 = new WebGLHelperFunctions2('gl-canvas');
+        let helper: WebGLHelperFunctions4 = new WebGLHelperFunctions4('gl-canvas');
         let gl = helper.gl;
 
         let p0 = [-0.5, -0.5]
@@ -115,13 +117,11 @@ class Square {
         let p2 = [0.5, 0.5]
         let p3 = [-0.5, 0.5]
 
-        let triVertices = [-0.5, -0.5, 0.5, -0.5, 0.5, 0.5];
-
-        let quaVertices = [].concat(p0, p3, p1, p3, p1, p2);
-        console.log(quaVertices)
+        let squareVertices = [].concat(p0, p3, p1, p3, p1, p2); //Vertices for a square
+        console.log(squareVertices)
 
         //2- Create vertices and associate them with a buffer
-        let vertex_buffer = helper.associateVerticesToBuffer(quaVertices);
+        let vertex_buffer = helper.associateVerticesToBuffer(squareVertices);
 
         //3- Create vertex and fragment shaders
         let vertexShader = helper.createShaders(helper.vertexShaderCode, gl.VERTEX_SHADER);
@@ -130,15 +130,25 @@ class Square {
         //4- Create program and attach the shaders
         let program = helper.createProgramAndAttachShaders(vertexShader, fragmentShader);
 
-        //Bind vertex buffer object
-        //gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
         //Get the attribute location cord for each vertex (inside vertexShaderCode)
-
         let pos = gl.getAttribLocation(program, "pos");
         gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);//point an attribute to the currently bound VBO
         gl.enableVertexAttribArray(pos);
 
+        //5- Draw the vertices and inside those vertices
         gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        // Draw a Triangle now
+        p0 = [0.0, 1.0];
+        p1 = [0.5, 1.0];
+        p2 = [0.0, 0.6];
+        let vertexTriangleBuffer = helper.associateVerticesToBuffer([].concat(p0, p1, p2));
+
+        pos = gl.getAttribLocation(program, "pos");//Get the Attribute Location/**/
+        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);//point an attribute to the currently bound VBO
+        gl.enableVertexAttribArray(pos);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
 }
